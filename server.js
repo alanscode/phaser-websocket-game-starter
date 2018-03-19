@@ -11,9 +11,6 @@ var io = socket(server);
 
 io.on('connection', socket=>{
     console.log('socket connection made', socket.id)
-    socket.on('fire',data=>{
-        io.sockets.emit('fire', data)
-    })
 
     socket.on('ship',data=>{
         io.sockets.emit('ship', data)
