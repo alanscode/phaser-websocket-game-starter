@@ -1,15 +1,15 @@
 var game = new Phaser.Game(
-  window.innerWidth-25,
+  window.innerWidth - 25,
   600,
   Phaser.CANVAS,
-  "phaser-example",
+  "phaser-multiplayer-socketio",
   { preload: preload, create: create, update: update, render: render }
 );
 
 function preload() {
   game.load.image("bullet", "assets/shmup-bullet.png");
   game.load.image("ship", "assets/thrust_ship.png");
-  game.load.image('background','assets/tests/debug-grid-1920x1920.png');
+  game.load.image("background", "assets/tests/debug-grid-1920x1920.png");
   game.stage.disableVisibilityChange = true;
 }
 
@@ -29,18 +29,17 @@ function create() {
       sprite.x = data.x;
       sprite.y = data.y;
       sprite.body.angularVelocity = data.angularVelocity;
-      sprite.angle = data.angle;   
+      sprite.angle = data.angle;
       sprite.body.acceleration.set(data.acceleration);
       sprite.body.velocity = data.velocity;
 
-      if(data.fire){
+      if (data.fire) {
         weapon.fire();
       }
     }
   });
 
-  
-  game.add.tileSprite(0, 0, 4920, 4920, 'background');
+  game.add.tileSprite(0, 0, 4920, 4920, "background");
 
   game.world.setBounds(0, 0, 4920, 4920);
 
@@ -48,7 +47,7 @@ function create() {
   weapon = game.add.weapon(30, "bullet");
 
   //  The bullets will be automatically killed when they are 2000ms old
-  weapon.bulletKillType = Phaser.Weapon.KILL_LIFESPAN;   
+  weapon.bulletKillType = Phaser.Weapon.KILL_LIFESPAN;
   weapon.bulletLifespan = 2000;
 
   //  The speed at which the bullet is fired
@@ -64,13 +63,13 @@ function create() {
 
   sprite.anchor.set(0.5);
 
-  sprite.scale.set(2,2)
+  sprite.scale.set(2, 2);
 
-  game.camera.follow(sprite)
+  game.camera.follow(sprite);
 
   game.physics.arcade.enable(sprite);
 
-  //sprite.body.drag.set(70);
+  //sprite.body.drag.set(35);
   sprite.body.maxVelocity.set(300);
 
   //  Tell the Weapon to track the 'player' Sprite
@@ -87,7 +86,7 @@ function create() {
   setInterval(emitShipSocket, 1);
 }
 
-function emitShipSocket(fire) {
+function emitShipSocket() {
   if (!masterId) return;
   socket.emit("ship", {
     id: socket.id,
@@ -97,16 +96,15 @@ function emitShipSocket(fire) {
     angle: sprite.angle,
     acceleration: sprite.body.acceleration,
     velocity: sprite.body.velocity,
-    fire:fireButton.isDown
+    fire: fireButton.isDown
   });
 }
 
-function update() {     
-
+function update() {
   if (cursors.up.isDown) {
     game.physics.arcade.accelerationFromRotation(
       sprite.rotation,
-      700,
+      900,
       sprite.body.acceleration
     );
     masterId = socket.id;
@@ -126,11 +124,9 @@ function update() {
 
   if (fireButton.isDown) {
     masterId = socket.id;
-    weapon.fire();    
+    weapon.fire();
     //socket.emit("fire", socket.id);
   }
-
-
 
   game.world.wrap(sprite, 16);
 }
