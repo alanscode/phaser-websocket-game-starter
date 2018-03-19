@@ -1,7 +1,7 @@
 var game = new Phaser.Game(
   window.innerWidth - 25,
   600,
-  Phaser.AUTO,
+  Phaser.CANVAS,
   "phaser-multiplayer-socketio",
   { preload: preload, create: create, update: update, render: render }
 );

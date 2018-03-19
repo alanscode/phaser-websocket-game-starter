@@ -3,16 +3,18 @@ const express = require("express");
 var path = require('path');
 
 var app = express();
-var web = express();
-web.use(express.static(__dirname + '/'));
 
-web.get('/', function(req, res) {
+app.use(express.static(__dirname + '/'));
+
+app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
-web.listen(4000)
+app.listen(4000,()=>{
+    console.log("<<< Static Host listening on port 4000 >>>");  
+})
 
 var server = app.listen(5000, () => {
-  console.log("<<< WS listening on port 3000 >>>");
+  console.log("<<< WS listening on port 5000 >>>");
 });
 
 var io = socket(server);
