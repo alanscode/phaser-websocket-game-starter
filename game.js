@@ -1,7 +1,7 @@
 var game = new Phaser.Game(
   window.innerWidth - 25,
   600,
-  Phaser.CANVAS,
+  Phaser.AUTO,
   "phaser-multiplayer-socketio",
   { preload: preload, create: create, update: update, render: render }
 );
@@ -21,7 +21,7 @@ var socket;
 var masterId;
 
 function create() {
-  socket = io("http://localhost:3000");
+  socket = io("http://localhost:5000");
 
   socket.on("ship", data => {
     if (masterId != socket.id) {
