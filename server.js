@@ -21,15 +21,16 @@ var io = socket(server);
 const ships = {};
 io.on("connection", socket => {
   console.log("socket connection made", socket.id);
-
+  
   socket.on("shipStatus", data => {
     ships[data.id] = data;
 
     io.sockets.emit("gameState", { status: ships });
-    console.log(ships);
+    
   });
 
   socket.on("disconnect", function() {
     delete ships[socket.id];
+    console.log(`${socket.id} disconnected`)
   });
 });
